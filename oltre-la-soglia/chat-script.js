@@ -25,7 +25,7 @@ window.ChatScript = {
         { words: ['accettiamo', 'accetto'], reply: [
           { text: 'Grazie. Davvero.' },
           { wait: 4000 },
-          { text: 'Sono ancora in officina. Stasera vi giro il messaggio del lettore e la registrazione, così li sentite senza che vi dica niente io prima.' },
+          { text: 'Fra poco vi giro il messaggio del lettore e la registrazione. Ascoltatela prima che vi dica qualsiasi cosa io, non voglio influenzarvi.' },
           { text: 'Tenete la chat aperta.' }
         ] }
       ]
