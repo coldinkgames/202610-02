@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Immobile</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Karla:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stile.css">
+</head>
+<body>
+<main>
+  <div class="testa">
+    <img class="logo" src="logo.png" alt="Cold Ink Games">
+    <div class="lingue"><button data-lingua="it">IT</button><button data-lingua="en">EN</button></div>
+  </div>
+  <p class="etichetta"><span data-t="caso"></span> #202610-02</p>
+  <h1>Immobile</h1>
+  <p data-t="lancio"></p>
+  <p class="motto" data-t="motto"></p>
+
+  <div class="scheda">
+    <h2 data-t="portali"></h2>
+    <ul class="portali">
+      <li><a href="oltre-la-soglia/">Oltre la Soglia</a><span data-t="blog"></span></li>
+      <li><a href="oltre-la-soglia/messaggi.html" data-t="chat_nome"></a><span data-t="chat"></span></li>
+    </ul>
+  </div>
+
+  <footer data-t="piede"></footer>
+</main>
+<script>
+const T = {
+  it: { caso: "Caso",
+        lancio: "Nord Italia, dicembre. Claudio Guerra va a caccia di fantasmi da sedici anni, e da qualche mese nessuno gli crede più. Un lettore gli scrive di una baita sul lago dove a giugno sono morti i due proprietari, e gli manda una registrazione in cui una voce sembra chiamarlo per nome. Claudio la baita l'ha affittata. Prima di scriverne vuole qualcuno che cerchi le spiegazioni normali: voi.",
+        motto: "Ogni rumore di una casa vecchia ha una spiegazione. Quasi ogni rumore.",
+        portali: "Portali dell'indagine",
+        blog: "Il blog di Claudio: sedici anni di sopralluoghi, e le critiche dell'ultimo anno.",
+        chat_nome: "Chat con Claudio",
+        chat: "Il filo diretto con Claudio. Le credenziali sono nella sua lettera. Tenetela aperta: scrive quando succede qualcosa.",
+        piede: "Materiale di gioco Cold Ink. Persone, luoghi e fatti del caso sono inventati." },
+  en: { caso: "Case",
+        lancio: "Northern Italy, December. Claudio Guerra has been hunting ghosts for sixteen years, and for a few months now nobody has believed him. A reader writes to him about a lakeside chalet where the two owners died in June, and sends him a recording in which a voice seems to call his name. Claudio has rented the chalet. Before he writes a word about it, he wants someone to look for the ordinary explanations: you.",
+        motto: "Every noise in an old house has an explanation. Almost every noise.",
+        portali: "Investigation portals",
+        blog: "Claudio's blog: sixteen years of site visits, and a year of criticism.",
+        chat_nome: "Chat with Claudio",
+        chat: "Your direct line to Claudio. The login details are in his letter. Keep it open: he writes when something happens.",
+        piede: "Cold Ink game material. The people, places and events of this case are fictional." }
+};
+</script>
+<script src="lingue.js"></script>
+</body>
+</html>

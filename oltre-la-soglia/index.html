@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Oltre la Soglia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="stile/tokens/fonts.css">
+<link rel="stylesheet" href="stile/tokens/colors.css">
+<link rel="stylesheet" href="stile/tokens/typography.css">
+<link rel="stylesheet" href="stile/tokens/spacing.css">
+<link rel="stylesheet" href="stile/tokens/base.css">
+<link rel="stylesheet" href="stile/styles.css">
+<script src="stile/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<script src="./blog-data.js"></script>
+<style>body{margin:0;background:#f7f3ea;}a{color:var(--terra-700);}a:hover{color:var(--terra-600);}</style>
+<style>
+@media (max-width: 760px) {
+  [style*="grid-template-columns: minmax(0px, 1fr) 300px"],
+  [style*="grid-template-columns: 200px minmax(0px, 1fr)"],
+  [style*="grid-template-columns: 340px minmax(0px, 1fr)"] { grid-template-columns: minmax(0, 1fr) !important; gap: 24px !important; }
+  [style*="grid-template-columns: 90px minmax(0px, 1fr) 160px"] { grid-template-columns: 64px minmax(0, 1fr) !important; padding: 12px 16px !important; }
+  [style*="padding: 48px 32px"] { padding: 24px 16px 64px !important; }
+  [style*="padding: 44px 32px 0px"] { padding: 28px 16px 0 !important; }
+  [style*="padding: 40px 44px"] { padding: 20px 16px !important; }
+  h1 { font-size: 40px !important; }
+}
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--bg-page);font-family:var(--font-body);color:var(--text-body)">
+
+<header style="background:var(--stone-950);color:var(--stone-050)">
+  <div style="max-width:1160px;margin:0 auto;padding:44px 32px 0;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:10px;cursor:pointer" onClick="{{ goBacheca }}">
+        <span style="font-size:12px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--terra-300)">Diario di caccia · dal 2010</span>
+        <h1 style="margin:0;font-family:var(--font-display);font-weight:600;font-size:52px;letter-spacing:var(--tracking-display);line-height:1;color:var(--stone-050)">Oltre la Soglia</h1>
+        <span style="font-size:16px;color:var(--stone-300)">Le soffiate, i sopralluoghi e le notti di Claudio Guerra nei luoghi infestati d'Italia</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+        <span style="font-family:var(--font-display);font-size:26px;color:var(--stone-050)">{{ subscribersLabel }}</span>
+        <span style="font-size:12px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--stone-300)">iscritti</span>
+      </div>
+    </div>
+    <nav style="display:flex;flex-wrap:wrap;gap:4px;border-top:1px solid var(--plum-700)">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+        <button onClick="{{ n.onClick }}" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;border-bottom:2px solid {{ n.border }};color:{{ n.color }};font-family:var(--font-body);font-size:14px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:16px 14px;cursor:pointer" style-hover="color:var(--stone-050)">
+          <sc-if value="{{ n.lock }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></sc-if>
+          {{ n.label }}
+        </button>
+      </sc-for>
+    </nav>
+  </div>
+</header>
+
+<sc-if value="{{ showPublic }}" hint-placeholder-val="{{ true }}">
+<main style="max-width:1160px;margin:0 auto;padding:48px 32px 96px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;align-items:start">
+  <div style="display:flex;flex-direction:column;gap:32px;min-width:0">
+
+    <sc-if value="{{ vBacheca }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <h2 style="margin:0;font-family:var(--font-display);font-size:28px;font-weight:600;letter-spacing:var(--tracking-display);color:var(--text-heading)">Bacheca</h2>
+        <span style="font-size:14px;color:var(--text-muted)">{{ feedNote }}</span>
+      </div>
+      <sc-for list="{{ feed }}" as="p" hint-placeholder-count="3">
+        <article style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;display:flex;flex-direction:column">
+          <div style="position:relative;aspect-ratio:16/9;background:var(--stone-900)">
+            <image-slot id="{{ p.slotId }}" shape="rect" placeholder="Foto del sopralluogo"></image-slot>
+          </div>
+          <div style="padding:24px 28px 20px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:13px;color:var(--text-muted)">
+              <span style="letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--plum-500);font-weight:700">{{ p.date }}</span>
+              <span style="display:flex;align-items:center;gap:5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>{{ p.place }}, {{ p.loc }}</span>
+              <sc-if value="{{ p.showDisputed }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="StileOltreLaSoglia.Badge" tone="danger" hint-size="90px,22px">Contestato</x-import></sc-if>
+            </div>
+            <h3 onClick="{{ p.onOpen }}" style="margin:0;font-family:var(--font-display);font-size:23px;font-weight:600;letter-spacing:0.03em;line-height:1.25;color:var(--text-heading);cursor:pointer;text-wrap:pretty" style-hover="color:var(--terra-700)">{{ p.title }}</h3>
+            <p style="margin:0;font-size:16px;line-height:1.6;text-wrap:pretty">{{ p.excerpt }}</p>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:6px;padding-top:14px;border-top:1px solid var(--border-subtle)">
+              <button onClick="{{ p.onLike }}" style="display:flex;align-items:center;gap:7px;background:transparent;border:0;border-radius:var(--radius-md);padding:8px 10px;cursor:pointer;font-family:var(--font-body);font-size:14px;font-weight:700;color:{{ p.heartColor }}" style-hover="background:var(--stone-100)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ p.heartFill }}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"></path></svg>{{ p.likesLabel }}
+              </button>
+              <button onClick="{{ p.onOpen }}" style="display:flex;align-items:center;gap:7px;background:transparent;border:0;border-radius:var(--radius-md);padding:8px 10px;cursor:pointer;font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--stone-700)" style-hover="background:var(--stone-100)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>{{ p.commentCount }} commenti
+              </button>
+              <span style="flex:1"></span>
+              <button onClick="{{ p.onOpen }}" style="background:transparent;border:0;cursor:pointer;font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--terra-700)" style-hover="color:var(--terra-600)">Continua a leggere…</button>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+      <sc-if value="{{ hasMore }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;justify-content:center">
+          <x-import component-from-global-scope="StileOltreLaSoglia.Button" variant="outline" on-click="{{ loadMore }}" hint-size="180px,44px">Post più vecchi</x-import>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ vPost }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ goBacheca }}" style="align-self:flex-start;background:transparent;border:0;padding:0;cursor:pointer;font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--terra-700)">← Torna alla bacheca</button>
+      <article style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden">
+        <div style="position:relative;aspect-ratio:16/9;background:var(--stone-900)">
+          <image-slot id="{{ cur.slotId }}" shape="rect" placeholder="Foto del sopralluogo"></image-slot>
+        </div>
+        <div style="padding:36px 44px 40px;display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;font-size:13px;color:var(--text-muted)">
+            <span style="letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--plum-500);font-weight:700">{{ cur.date }}</span>
+            <span>{{ cur.place }}, {{ cur.loc }}</span>
+            <sc-if value="{{ cur.showDisputed }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="StileOltreLaSoglia.Badge" tone="danger" hint-size="90px,22px">Contestato</x-import></sc-if>
+          </div>
+          <h2 style="margin:0;font-family:var(--font-display);font-size:34px;font-weight:600;letter-spacing:0.03em;line-height:1.2;color:var(--text-heading);text-wrap:pretty">{{ cur.title }}</h2>
+          <sc-for list="{{ cur.paras }}" as="t" hint-placeholder-count="3">
+            <p style="margin:0;font-size:17px;line-height:1.7;text-wrap:pretty">{{ t }}</p>
+          </sc-for>
+          <div style="display:flex;align-items:center;gap:6px;padding-top:16px;border-top:1px solid var(--border-subtle)">
+            <button onClick="{{ cur.onLike }}" style="display:flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius-pill);padding:8px 16px;cursor:pointer;font-family:var(--font-body);font-size:14px;font-weight:700;color:{{ cur.heartColor }}" style-hover="background:var(--stone-100)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="{{ cur.heartFill }}" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"></path></svg>{{ cur.likesLabel }} mi piace
+            </button>
+          </div>
+        </div>
+      </article>
+      <section style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <h3 style="margin:0;font-family:var(--font-display);font-size:22px;font-weight:600;letter-spacing:var(--tracking-display);color:var(--text-heading)">Commenti</h3>
+          <span style="font-size:14px;color:var(--text-muted)">{{ cur.commentNote }}</span>
+        </div>
+        <sc-for list="{{ cur.comments }}" as="c" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:6px;padding:18px 22px;background:{{ c.bg }};border:1px solid var(--border-subtle);border-radius:var(--radius-lg)">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+              <span style="font-weight:700;color:var(--text-heading)">{{ c.a }}</span>
+              <sc-if value="{{ c.hasRole }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:var(--text-muted)">{{ c.role }}</span></sc-if>
+              <sc-if value="{{ c.author }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="StileOltreLaSoglia.Badge" tone="sage" hint-size="70px,22px">Autore</x-import></sc-if>
+              <sc-if value="{{ c.critic }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="StileOltreLaSoglia.Badge" tone="plum" hint-size="80px,22px">Verifica</x-import></sc-if>
+            </div>
+            <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">{{ c.t }}</p>
+          </div>
+        </sc-for>
+        <div style="display:flex;flex-direction:column;gap:12px;padding:22px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg)">
+          <span style="font-size:13px;color:var(--text-muted)">Commenti come <strong style="color:var(--text-heading)">Iscritto_4471</strong></span>
+          <x-import component-from-global-scope="StileOltreLaSoglia.Input" placeholder="Scrivi un commento…" value="{{ draft }}" on-change="{{ setDraft }}" full-width="{{ true }}" hint-size="100%,46px"></x-import>
+          <div style="display:flex;justify-content:flex-end">
+            <x-import component-from-global-scope="StileOltreLaSoglia.Button" on-click="{{ submitComment }}" hint-size="120px,44px">Pubblica</x-import>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ vArchivio }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h2 style="margin:0;font-family:var(--font-display);font-size:28px;font-weight:600;letter-spacing:var(--tracking-display);color:var(--text-heading)">Archivio</h2>
+        <span style="font-size:15px;color:var(--text-muted)">{{ archiveNote }}</span>
+      </div>
+      <sc-for list="{{ archive }}" as="g" hint-placeholder-count="2">
+        <section style="display:flex;flex-direction:column;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;padding:16px 24px;background:var(--stone-100);border-bottom:1px solid var(--border-subtle)">
+            <span style="font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--text-heading)">{{ g.y }}</span>
+            <span style="font-size:13px;color:var(--text-muted)">{{ g.count }} post</span>
+          </div>
+          <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.onOpen }}" style="display:grid;grid-template-columns:90px minmax(0,1fr) 160px;gap:16px;align-items:center;padding:12px 24px;border-bottom:1px solid var(--border-subtle);cursor:pointer" style-hover="background:var(--stone-050)">
+              <span style="font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em">{{ r.month }}</span>
+              <span style="font-size:15px;font-weight:600;color:var(--text-heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.title }}</span>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="flex:1;height:6px;background:var(--stone-100);border-radius:var(--radius-pill);overflow:hidden"><div style="height:100%;width:{{ r.barW }};background:var(--terra-500);border-radius:var(--radius-pill)"></div></div>
+                <span style="width:44px;text-align:right;font-size:13px;font-weight:700;color:var(--stone-700)">{{ r.likes }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </section>
+      </sc-for>
+    </sc-if>
+
+    <sc-if value="{{ vChiSono }}" hint-placeholder-val="{{ false }}">
+      <article style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:40px 44px;display:grid;grid-template-columns:200px minmax(0,1fr);gap:36px;align-items:start">
+        <div style="width:200px;height:240px;background:var(--stone-150);border-radius:var(--radius-lg);overflow:hidden">
+          <image-slot id="claudio-ritratto" shape="rect" placeholder="Ritratto di Claudio Guerra"></image-slot>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <span style="font-size:12px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--plum-500);font-weight:700">Chi sono</span>
+          <h2 style="margin:0;font-family:var(--font-display);font-size:32px;font-weight:600;letter-spacing:var(--tracking-display);color:var(--text-heading)">Claudio Guerra, 35 anni</h2>
+          <p style="margin:0;font-size:17px;line-height:1.7">Sono nato a Parma nel 1991. Ho aperto questo blog a diciannove anni con una compatta e un amico, Luca, che non aveva paura del buio. Da allora ho visitato più di trenta luoghi in tutta Italia, quasi sempre su segnalazione di chi mi legge.</p>
+          <p style="margin:0;font-size:17px;line-height:1.7">Di giorno lavoro in un'officina. Di notte vado dove mi mandano le vostre soffiate. Pubblico quello che trovo, anche quando non trovo niente.</p>
+          <p style="margin:0;font-size:17px;line-height:1.7">Soffiate, testimonianze, registrazioni: <a href="#">soffiate@oltrelasoglia.it</a></p>
+        </div>
+      </article>
+    </sc-if>
+  </div>
+
+  <aside style="display:flex;flex-direction:column;gap:24px;position:sticky;top:24px">
+    <div style="background:var(--stone-900);color:var(--stone-050);border-radius:var(--radius-lg);padding:24px;display:flex;flex-direction:column;gap:12px">
+      <span style="font-family:var(--font-display);font-size:20px;font-weight:600;letter-spacing:var(--tracking-display)">Hai una soffiata?</span>
+      <span style="font-size:15px;line-height:1.55;color:var(--stone-150)">Un posto abbandonato, una storia di famiglia, una registrazione. Scrivimi, leggo tutto.</span>
+      <x-import component-from-global-scope="StileOltreLaSoglia.Button" on-click="{{ goChiSono }}" full-width="{{ true }}" hint-size="100%,44px">Manda una soffiata</x-import>
+    </div>
+    <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px 24px;display:flex;flex-direction:column;gap:10px">
+      <span style="font-size:12px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--plum-500);font-weight:700">Archivio per anno</span>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <sc-for list="{{ years }}" as="y" hint-placeholder-count="8">
+          <button onClick="{{ y.onClick }}" style="font-family:var(--font-body);font-size:13px;font-weight:700;padding:5px 11px;border-radius:var(--radius-pill);border:1px solid var(--border-subtle);background:{{ y.bg }};color:{{ y.color }};cursor:pointer">{{ y.y }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px 24px;display:flex;flex-direction:column;gap:12px">
+      <span style="font-size:12px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--plum-500);font-weight:700">I più amati</span>
+      <sc-for list="{{ top }}" as="t" hint-placeholder-count="5">
+        <div onClick="{{ t.onOpen }}" style="display:flex;flex-direction:column;gap:2px;cursor:pointer">
+          <span style="font-size:14px;font-weight:700;color:var(--text-heading);line-height:1.35" style-hover="color:var(--terra-700)">{{ t.title }}</span>
+          <span style="font-size:12px;color:var(--text-muted)">{{ t.year }} · {{ t.likes }} mi piace</span>
+        </div>
+      </sc-for>
+    </div>
+  </aside>
+</main>
+</sc-if>
+
+<sc-if value="{{ vLogin }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:1160px;margin:0 auto;padding:96px 32px;display:flex;justify-content:center">
+    <div style="width:100%;max-width:400px;background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:36px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:12px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--plum-500);font-weight:700">Area privata</span>
+        <h2 style="margin:0;font-family:var(--font-display);font-size:26px;font-weight:600;letter-spacing:var(--tracking-display);color:var(--text-heading)">Accesso autore</h2>
+      </div>
+      <x-import component-from-global-scope="StileOltreLaSoglia.Input" label="Utente" value="{{ loginUser }}" on-change="{{ setLoginUser }}" full-width="{{ true }}" hint-size="100%,72px"></x-import>
+      <x-import component-from-global-scope="StileOltreLaSoglia.Input" label="Password" type="password" value="{{ loginPass }}" on-change="{{ setLoginPass }}" error="{{ loginErr }}" full-width="{{ true }}" hint-size="100%,72px"></x-import>
+      <x-import component-from-global-scope="StileOltreLaSoglia.Button" on-click="{{ doLogin }}" full-width="{{ true }}" hint-size="100%,46px">Accedi</x-import>
+    </div>
+  </main>
+</sc-if>
+
+<sc-if value="{{ vInbox }}" hint-placeholder-val="{{ false }}">
+  <main style="max-width:1160px;margin:0 auto;padding:40px 32px 96px;display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <h2 style="margin:0;font-family:var(--font-display);font-size:28px;font-weight:600;letter-spacing:var(--tracking-display);color:var(--text-heading)">Posta in arrivo</h2>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="font-size:14px;color:var(--text-muted)">{{ unreadLabel }}</span>
+        <a href="messaggi.html" style="font-size:14px;font-weight:700;text-decoration:none;color:var(--terra-700)">Messaggi →</a>
+        <x-import component-from-global-scope="StileOltreLaSoglia.Button" variant="ghost" size="sm" on-click="{{ doLogout }}" hint-size="80px,36px">Esci</x-import>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:340px minmax(0,1fr);background:var(--surface-card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);overflow:hidden;min-height:640px">
+      <div style="border-right:1px solid var(--border-subtle);display:flex;flex-direction:column">
+        <sc-for list="{{ mails }}" as="m" hint-placeholder-count="6">
+          <div onClick="{{ m.onOpen }}" style="display:flex;flex-direction:column;gap:4px;padding:16px 20px;border-bottom:1px solid var(--border-subtle);border-left:3px solid {{ m.edge }};background:{{ m.bg }};cursor:pointer" style-hover="background:var(--stone-050)">
+            <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
+              <span style="font-size:14px;font-weight:{{ m.weight }};color:var(--text-heading);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ m.from }}</span>
+              <span style="flex:none;font-size:12px;color:var(--text-muted)">{{ m.short }}</span>
+            </div>
+            <span style="font-size:14px;font-weight:{{ m.weight }};color:var(--stone-900);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ m.subject }}</span>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-muted)">
+              <sc-if value="{{ m.hasAtt }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l8.6-8.6A4 4 0 1 1 18 8.8l-8.6 8.6a2 2 0 0 1-2.8-2.8l8.5-8.5"></path></svg></sc-if>
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ m.preview }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="padding:32px 40px;display:flex;flex-direction:column;gap:20px;min-width:0">
+        <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:18px;border-bottom:1px solid var(--border-subtle)">
+          <h3 style="margin:0;font-family:var(--font-display);font-size:24px;font-weight:600;letter-spacing:0.03em;color:var(--text-heading)">{{ mail.subject }}</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;font-size:14px">
+            <strong style="color:var(--text-heading)">{{ mail.from }}</strong>
+            <span style="color:var(--text-muted)">&lt;{{ mail.addr }}&gt;</span>
+            <span style="flex:1"></span>
+            <span style="color:var(--text-muted)">{{ mail.date }}</span>
+          </div>
+        </div>
+        <p style="margin:0;font-size:16px;line-height:1.7;white-space:pre-wrap;color:var(--stone-900)">{{ mail.body }}</p>
+        <sc-if value="{{ mail.hasAtt }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:12px;padding-top:18px;border-top:1px solid var(--border-subtle)">
+            <span style="font-size:12px;letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--plum-500);font-weight:700">{{ mail.attLabel }}</span>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">
+              <sc-for list="{{ mail.att }}" as="a" hint-placeholder-count="2">
+                <button onClick="{{ a.onOpen }}" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-md);border:1px solid {{ a.border }};background:{{ a.bg }};cursor:pointer;font-family:var(--font-body);text-align:left">
+                  <span style="width:34px;height:34px;flex:none;border-radius:8px;background:var(--stone-900);color:var(--terra-300);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:0.06em">{{ a.ext }}</span>
+                  <span style="display:flex;flex-direction:column;gap:1px">
+                    <span style="font-size:14px;font-weight:700;color:var(--text-heading)">{{ a.name }}</span>
+                    <span style="font-size:12px;color:var(--text-muted)">{{ a.kind }} · {{ a.size }}</span>
+                  </span>
+                </button>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ view.isText }}" hint-placeholder-val="{{ false }}">
+              <pre style="margin:0;padding:22px 24px;background:var(--stone-050);border:1px solid var(--border-subtle);border-radius:var(--radius-md);font-family:ui-monospace,Menlo,monospace;font-size:14px;line-height:1.65;color:var(--stone-900);white-space:pre-wrap">{{ view.text }}</pre>
+            </sc-if>
+            <sc-if value="{{ view.isAudio }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:center;gap:18px;padding:18px 22px;background:var(--stone-950);border-radius:var(--radius-md)">
+                <button onClick="{{ view.onToggle }}" style="width:48px;height:48px;flex:none;border-radius:50%;border:0;background:var(--terra-600);color:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:var(--terra-700)">
+                  <sc-if value="{{ view.playing }}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg></sc-if>
+                  <sc-if value="{{ view.paused }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"></polygon></svg></sc-if>
+                </button>
+                <div onClick="{{ view.onSeek }}" style="flex:1;height:56px;display:flex;align-items:center;gap:2px;cursor:pointer;min-width:0">
+                  <sc-for list="{{ view.bars }}" as="b" hint-placeholder-count="40">
+                    <div style="flex:1;height:{{ b.h }};background:{{ b.bg }};border-radius:2px"></div>
+                  </sc-for>
+                </div>
+                <span style="flex:none;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--stone-300)">{{ view.time }}</span>
+              </div>
+            </sc-if>
+            <sc-if value="{{ view.isPhoto }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative;aspect-ratio:4/3;max-width:640px;background:var(--stone-900);border-radius:var(--radius-md);overflow:hidden">
+                <image-slot id="{{ view.slotId }}" shape="rect" placeholder="{{ view.name }}"></image-slot>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </main>
+</sc-if>
+
+<footer style="border-top:1px solid var(--border-subtle);padding:28px 32px;text-align:center;font-size:13px;color:var(--text-muted)">Oltre la Soglia · il diario di Claudio Guerra · 2010–2026</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;postsPerPage&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:6,&quot;min&quot;:2,&quot;max&quot;:20,&quot;tsType&quot;:&quot;number&quot;},&quot;showDisputed&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Bacheca&quot;,&quot;Area privata&quot;],&quot;default&quot;:&quot;Bacheca&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { ready: !!window.BlogData, view: (this.props.startView === 'Area privata' || location.hash === '#area-privata') ? 'login' : 'bacheca', postId: null, shown: null, year: null, liked: {}, extra: {}, draft: '', loginUser: 'claudio', loginPass: '', loginErr: '', mailId: 'e1', read: {}, att: null, playing: false, pos: 0 };
+
+  componentDidMount() {
+    if (!this.state.ready) this._poll = setInterval(() => { if (window.BlogData) { clearInterval(this._poll); this.setState({ ready: true }); } }, 50);
+  }
+  componentWillUnmount() { clearInterval(this._poll); this.stopAudio(); }
+
+  go(view, extra) { this.stopAudio(); this.setState(Object.assign({ view }, extra || {})); window.scrollTo(0, 0); }
+
+  startAudio(dur) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (AC) {
+      try {
+        const ctx = this._ctx || (this._ctx = new AC());
+        ctx.resume && ctx.resume();
+        const len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+        let last = 0;
+        for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; last = (last + 0.02 * w) / 1.02; d[i] = last * 3.2; }
+        const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+        const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 420; f.Q.value = 0.7;
+        const g = ctx.createGain(); g.gain.value = 0.22;
+        src.connect(f); f.connect(g); g.connect(ctx.destination); src.start();
+        this._src = src;
+      } catch (e) {}
+    }
+    clearInterval(this._tick);
+    this._tick = setInterval(() => {
+      const p = this.state.pos + 0.1;
+      if (p >= dur) { this.stopAudio(); this.setState({ pos: 0 }); } else this.setState({ pos: p });
+    }, 100);
+    this.setState({ playing: true });
+  }
+  stopAudio() {
+    clearInterval(this._tick);
+    if (this._src) { try { this._src.stop(); } catch (e) {} this._src = null; }
+    if (this.state.playing) this.setState({ playing: false });
+  }
+
+  renderVals() {
+    const D = window.BlogData;
+    const s = this.state;
+    const per = this.props.postsPerPage ?? 6;
+    const showDisp = this.props.showDisputed ?? true;
+    const fmt = n => n.toLocaleString('it-IT');
+    const base = {
+      subscribersLabel: D ? fmt(D.subscribers) : '', goBacheca: () => this.go('bacheca', { postId: null }), goChiSono: () => this.go('chisono'),
+    };
+    const nv = [['bacheca', 'Bacheca'], ['archivio', 'Archivio'], ['chisono', 'Chi sono'], ['priv', 'Area privata']];
+    const curNav = s.view === 'post' ? 'bacheca' : (s.view === 'login' || s.view === 'inbox') ? 'priv' : s.view;
+    base.nav = nv.map(([k, l]) => ({ label: l, lock: k === 'priv', border: curNav === k ? 'var(--terra-500)' : 'transparent', color: curNav === k ? 'var(--stone-050)' : 'var(--stone-300)',
+      onClick: () => k === 'priv' ? this.go(s.logged ? 'inbox' : 'login') : this.go(k, { postId: null }) }));
+    if (!D) return Object.assign(base, { showPublic: true, vBacheca: true, feed: [] });
+
+    const posts = D.posts;
+    const likesOf = p => p.likes + (s.liked[p.id] ? 1 : 0);
+    const toggle = id => this.setState(st => ({ liked: Object.assign({}, st.liked, { [id]: !st.liked[id] }) }));
+    const open = id => this.go('post', { postId: id, draft: '' });
+    const card = p => ({
+      id: p.id, slotId: 'foto-' + p.id, date: p.date, place: p.place, loc: p.loc, title: p.title, excerpt: p.excerpt,
+      likesLabel: fmt(likesOf(p)), heartFill: s.liked[p.id] ? 'currentColor' : 'none', heartColor: s.liked[p.id] ? 'var(--terra-600)' : 'var(--stone-700)',
+      onLike: () => toggle(p.id), onOpen: () => open(p.id), commentCount: fmt(p.commentCount + (s.extra[p.id] || []).length), showDisputed: showDisp && p.disputed,
+    });
+
+    let list = posts.slice().reverse();
+    if (s.year) list = list.filter(p => p.y === s.year);
+    const shown = s.shown || per;
+    const yearsAll = [...new Set(posts.map(p => p.y))].reverse();
+
+    const out = Object.assign(base, {
+      showPublic: ['bacheca', 'post', 'archivio', 'chisono'].includes(s.view),
+      vBacheca: s.view === 'bacheca', vPost: s.view === 'post', vArchivio: s.view === 'archivio', vChiSono: s.view === 'chisono', vLogin: s.view === 'login', vInbox: s.view === 'inbox',
+      feed: list.slice(0, shown).map(card), hasMore: shown < list.length,
+      loadMore: () => this.setState({ shown: shown + per }),
+      feedNote: s.year ? `${list.length} post del ${s.year}` : `${posts.length} post dal 2010`,
+      years: [{ y: 'Tutti', v: null }].concat(yearsAll.map(y => ({ y: String(y), v: y }))).map(o => ({ y: o.y, bg: s.year === o.v ? 'var(--stone-900)' : 'var(--white)', color: s.year === o.v ? 'var(--stone-050)' : 'var(--stone-700)',
+        onClick: () => this.go('bacheca', { year: o.v, shown: null, postId: null }) })),
+      top: posts.slice().sort((a, b) => b.likes - a.likes).slice(0, 5).map(p => ({ title: p.title, year: p.y, likes: fmt(likesOf(p)), onOpen: () => open(p.id) })),
+    });
+
+    if (s.view === 'post') {
+      const p = posts.find(x => x.id === s.postId) || posts[posts.length - 1];
+      const cs = p.comments.concat(s.extra[p.id] || []).map(c => ({ a: c.a, role: c.role || '', hasRole: !!c.role, t: c.t, critic: !!c.critic, author: !!c.author, bg: c.author ? 'var(--brand-soft)' : 'var(--surface-card)' }));
+      const total = p.commentCount + (s.extra[p.id] || []).length;
+      out.cur = Object.assign(card(p), { paras: p.body, comments: cs, commentNote: cs.length < total ? `Mostrati ${cs.length} di ${fmt(total)}` : `${total} commenti` });
+      out.draft = s.draft;
+      out.setDraft = v => this.setState({ draft: typeof v === 'string' ? v : (v && v.target ? v.target.value : '') });
+      out.submitComment = () => { const t = s.draft.trim(); if (!t) return; this.setState(st => ({ draft: '', extra: Object.assign({}, st.extra, { [p.id]: (st.extra[p.id] || []).concat([{ a: 'Iscritto_4471', t }]) }) })); };
+    }
+
+    if (s.view === 'archivio') {
+      const max = posts[0].likes;
+      out.archiveNote = `${posts.length} post, dal febbraio 2010 a oggi. La barra indica i mi piace ricevuti.`;
+      out.archive = yearsAll.map(y => { const rows = posts.filter(p => p.y === y).reverse(); return { y, count: rows.length, rows: rows.map(p => ({ month: p.monthLabel, title: p.title, likes: fmt(likesOf(p)), barW: Math.max(1, likesOf(p) / max * 100).toFixed(1) + '%', onOpen: () => open(p.id) })) }; });
+    }
+
+    out.loginUser = s.loginUser; out.loginPass = s.loginPass; out.loginErr = s.loginErr || undefined;
+    const val = v => typeof v === 'string' ? v : (v && v.target ? v.target.value : '');
+    out.setLoginUser = v => this.setState({ loginUser: val(v) });
+    out.setLoginPass = v => this.setState({ loginPass: val(v), loginErr: '' });
+    out.doLogin = () => { if (s.loginUser.trim().toLowerCase() === 'claudio' && s.loginPass) this.go('inbox', { logged: true, read: { e1: true } }); else this.setState({ loginErr: 'Utente o password non corretti' }); };
+    out.doLogout = () => this.go('bacheca', { logged: false, loginPass: '' });
+
+    if (s.view === 'inbox') {
+      const E = D.emails;
+      const isUnread = e => e.unread && !s.read[e.id];
+      const unread = E.filter(isUnread).length;
+      out.unreadLabel = unread ? (unread === 1 ? '1 non letta' : `${unread} non lette`) : 'Tutte lette';
+      out.mails = E.map(e => ({ from: e.from, subject: e.subject, short: e.date.split(',')[0], preview: e.body.split('\n')[0], hasAtt: e.att.length > 0,
+        weight: isUnread(e) ? 700 : 500, edge: e.id === s.mailId ? 'var(--terra-600)' : 'transparent', bg: e.id === s.mailId ? 'var(--stone-100)' : 'var(--surface-card)',
+        onOpen: () => { this.stopAudio(); this.setState(st => ({ mailId: e.id, att: null, pos: 0, read: Object.assign({}, st.read, { [e.id]: true }) })); } }));
+      const e = E.find(x => x.id === s.mailId) || E[0];
+      const ext = { text: 'TXT', audio: 'AUDIO', photo: 'IMG' }, kind = { text: 'Testo', audio: 'Audio', photo: 'Foto' };
+      out.mail = { subject: e.subject, from: e.from, addr: e.addr, date: e.date, body: e.body, hasAtt: e.att.length > 0, attLabel: e.att.length === 1 ? '1 allegato' : `${e.att.length} allegati`,
+        att: e.att.map((a, i) => { const on = s.att === i; return { name: a.name, size: a.size, ext: ext[a.type], kind: kind[a.type], border: on ? 'var(--terra-600)' : 'var(--border-strong)', bg: on ? 'var(--accent-soft)' : 'var(--white)',
+          onOpen: () => { this.stopAudio(); this.setState({ att: on ? null : i, pos: 0 }); } }; }) };
+      const a = s.att != null ? e.att[s.att] : null;
+      const v = { isText: !!a && a.type === 'text', isAudio: !!a && a.type === 'audio', isPhoto: !!a && a.type === 'photo' };
+      if (a) {
+        v.name = a.name; v.text = a.text; v.slotId = 'mail-' + e.id + '-' + s.att;
+        if (a.type === 'audio') {
+          const frac = s.pos / a.dur, mm = t => Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
+          v.bars = a.wave.map((h, i) => ({ h: h + '%', bg: i / a.wave.length < frac ? 'var(--terra-500)' : 'var(--plum-500)' }));
+          v.time = mm(s.pos) + ' / ' + mm(a.dur); v.playing = s.playing; v.paused = !s.playing;
+          v.onToggle = () => s.playing ? this.stopAudio() : this.startAudio(a.dur);
+          v.onSeek = ev => { const r = ev.currentTarget.getBoundingClientRect(); this.setState({ pos: Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * a.dur }); };
+        }
+      }
+      out.view = v;
+    }
+    return out;
+  }
+}
+</script>
+</body>
+</html>

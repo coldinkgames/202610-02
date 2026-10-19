@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Messaggi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+<script src="./chat-script.js"></script>
+<style>body{margin:0;background:#e9ebee;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;}a{color:#1f8a5b;}a:hover{color:#176b46;}textarea::placeholder,input::placeholder{color:#8a9099;}</style>
+<style>aside { overflow: hidden; min-width: 0; }</style>
+</helmet>
+<div style="height:100vh;min-height:620px;display:flex;flex-direction:column;color:#15181d;font-size:14px" onDragOver="{{ onDragOver }}" onDrop="{{ onDrop }}">
+  <div style="flex:1;min-height:0;display:grid;grid-template-columns:{{ cols }};max-width:1600px;width:100%;margin:0 auto;background:#fff;box-shadow:0 0 0 1px #dfe2e6">
+
+    <aside style="display:flex;flex-direction:column;border-right:1px solid #e4e6ea;min-height:0">
+      <div style="height:60px;flex:none;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid #eceef1">
+        <div style="width:36px;height:36px;border-radius:50%;background:#2f3a4a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px">{{ meInitials }}</div>
+        <span style="font-size:17px;font-weight:700;flex:1">Messaggi</span>
+        <a href="index.html#area-privata" style="font-size:13px;text-decoration:none;font-weight:600">Area privata</a>
+      </div>
+      <div style="padding:10px 12px;flex:none">
+        <div style="display:flex;align-items:center;gap:8px;background:#f1f3f5;border-radius:10px;padding:0 12px;height:38px;color:#6b7280">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <input value="{{ search }}" onChange="{{ onSearch }}" placeholder="Cerca una chat" style="flex:1;border:0;background:transparent;outline:none;font:inherit;color:#15181d">
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:auto">
+        <sc-for list="{{ list }}" as="c" hint-placeholder-count="2">
+          <div onClick="{{ c.onOpen }}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;background:{{ c.bg }}" style-hover="background:#f5f6f8">
+            <div style="position:relative;width:48px;height:48px;flex:none;border-radius:50%;overflow:hidden;background:{{ c.color }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px">
+              {{ c.initials }}
+              <sc-if value="{{ c.hasPhoto }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background-size:cover;background-position:center;background-image:{{ c.photoBg }}"></div></sc-if>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+              <div style="display:flex;justify-content:space-between;gap:8px">
+                <span style="font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.name }}</span>
+                <span style="flex:none;font-size:12px;color:{{ c.timeColor }}">{{ c.time }}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+                <span style="font-size:13.5px;color:{{ c.previewColor }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.preview }}</span>
+                <sc-if value="{{ c.hasUnread }}" hint-placeholder-val="{{ false }}"><span style="flex:none;min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:10px;background:#1f8a5b;color:#fff;font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ c.unread }}</span></sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </aside>
+
+    <section style="display:flex;flex-direction:column;min-height:0;min-width:0;position:relative">
+      <header style="height:60px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px;border-bottom:1px solid #eceef1;background:#fff">
+        <div onClick="{{ toggleInfo }}" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:pointer">
+          <div style="position:relative;width:40px;height:40px;flex:none;border-radius:50%;overflow:hidden;background:{{ chat.color }};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">
+            {{ chat.initials }}
+            <sc-if value="{{ chat.hasPhoto }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background-size:cover;background-position:center;background-image:{{ chat.photoBg }}"></div></sc-if>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+            <span style="font-weight:600;font-size:15.5px">{{ chat.name }}</span>
+            <span style="font-size:12.5px;color:{{ chat.statusColor }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ chat.status }}</span>
+          </div>
+        </div>
+        <span style="font-size:12px;color:#8a9099;font-variant-numeric:tabular-nums">{{ clockLabel }}</span>
+        <button onClick="{{ resetChat }}" style="height:34px;padding:0 12px;border-radius:8px;border:1px solid #e1e4e8;background:#fff;font:inherit;font-size:13px;color:#4b5260;cursor:pointer" style-hover="background:#f3f4f6">Ricomincia</button>
+      </header>
+
+      <div data-chat-scroll="1" style="flex:1;min-height:0;overflow-y:auto;background:#efece4;padding:16px 7% 12px;display:flex;flex-direction:column">
+        <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="margin:auto;display:flex;flex-direction:column;align-items:center;gap:6px;color:#6b7280;text-align:center;max-width:320px">
+            <span style="font-size:15px;font-weight:600;color:#3b414b">{{ chat.name }}</span>
+            <span style="font-size:13px;line-height:1.5">Nessun messaggio. Scrivi per iniziare la conversazione.</span>
+          </div>
+        </sc-if>
+        <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="0">
+          <sc-if value="{{ m.showDay }}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:center;margin:14px 0 8px;padding:5px 12px;border-radius:8px;background:#fff;font-size:12px;font-weight:600;color:#5b6270;box-shadow:0 1px 1px rgba(0,0,0,.05)">{{ m.dayLabel }}</div>
+          </sc-if>
+          <div onMouseEnter="{{ m.onEnter }}" onMouseLeave="{{ m.onLeave }}" style="display:flex;flex-direction:column;align-items:{{ m.align }};margin-top:{{ m.gapTop }}">
+            <div style="display:flex;align-items:center;gap:6px;flex-direction:{{ m.rowDir }};max-width:66%">
+              <div style="background:{{ m.bg }};border-radius:12px;padding:6px 8px 6px 10px;box-shadow:0 1px 1px rgba(0,0,0,.06);min-width:90px;display:flex;flex-direction:column;gap:5px;min-width:0">
+                <sc-if value="{{ m.fwd }}" hint-placeholder-val="{{ false }}">
+                  <span style="display:flex;align-items:center;gap:4px;font-size:12px;font-style:italic;color:#7b828d"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"></path><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5 5.5 5.5 0 0 0 9.5 20H13"></path></svg>Inoltrato</span>
+                </sc-if>
+                <sc-if value="{{ m.showName }}" hint-placeholder-val="{{ false }}"><span style="font-size:12.5px;font-weight:700;color:{{ m.nameColor }}">{{ m.name }}</span></sc-if>
+                <sc-if value="{{ m.hasReply }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;gap:2px;padding:6px 10px;border-radius:8px;background:{{ m.quoteBg }};border-left:3px solid {{ m.quoteColor }}">
+                    <span style="font-size:12px;font-weight:700;color:{{ m.quoteColor }}">{{ m.replyAuthor }}</span>
+                    <span style="font-size:12.5px;color:#4b5260;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:340px">{{ m.replyText }}</span>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.isImage }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:relative;width:300px;height:225px;border-radius:8px;overflow:hidden;background:#2b2f36">
+                    <sc-if value="{{ m.hasSrc }}" hint-placeholder-val="{{ false }}"><div onClick="{{ m.onExpand }}" style="width:100%;height:100%;background-size:cover;background-position:center;background-image:{{ m.srcBg }};cursor:zoom-in"></div></sc-if>
+                    <sc-if value="{{ m.noSrc }}" hint-placeholder-val="{{ false }}"><image-slot id="{{ m.slotId }}" shape="rect" placeholder="Trascina qui la foto"></image-slot></sc-if>
+                    <button onClick="{{ m.onExpand }}" title="Apri a schermo intero" style="position:absolute;top:8px;right:8px;width:32px;height:32px;border:0;border-radius:50%;background:rgba(15,17,20,.6);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:rgba(15,17,20,.85)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg></button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ m.onExpand }}" style="position:relative;width:300px;height:200px;border-radius:8px;overflow:hidden;background:#1d2026;cursor:pointer">
+                    <sc-if value="{{ m.hasSrc }}" hint-placeholder-val="{{ false }}"><video ref="{{ m.vRef }}" preload="metadata" style="width:100%;height:100%;object-fit:cover;display:block"></video></sc-if>
+                    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+                      <span style="width:52px;height:52px;border-radius:50%;background:rgba(15,17,20,.6);color:#fff;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"></polygon></svg></span>
+                    </div>
+                    <span style="position:absolute;left:8px;bottom:8px;display:flex;align-items:center;gap:5px;padding:2px 7px;border-radius:6px;background:rgba(15,17,20,.6);color:#fff;font-size:11.5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"></rect><path d="m16 10 6-3v10l-6-3"></path></svg>{{ m.vdur }}</span>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.isVoice }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:10px;width:300px;padding:2px 0">
+                    <button onClick="{{ m.onVToggle }}" style="width:38px;height:38px;flex:none;border:0;border-radius:50%;background:#1f8a5b;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#176b46">
+                      <sc-if value="{{ m.vPlaying }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg></sc-if>
+                      <sc-if value="{{ m.vPaused }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"></polygon></svg></sc-if>
+                    </button>
+                    <div style="flex:1;display:flex;flex-direction:column;gap:3px;min-width:0">
+                      <div onClick="{{ m.onVSeek }}" style="height:30px;display:flex;align-items:center;gap:2px;cursor:pointer">
+                        <sc-for list="{{ m.bars }}" as="b" hint-placeholder-count="36">
+                          <div style="flex:1;height:{{ b.h }};background:{{ b.bg }};border-radius:2px"></div>
+                        </sc-for>
+                      </div>
+                      <span style="font-size:11.5px;color:#6b7280;font-variant-numeric:tabular-nums">{{ m.vTime }}</span>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.isDoc }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ m.onDoc }}" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:{{ m.quoteBg }};width:280px;box-sizing:border-box;cursor:pointer" style-hover="opacity:.85">
+                    <div style="width:36px;height:44px;flex:none;border-radius:5px;background:#c2412d;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;box-sizing:border-box">{{ m.ext }}</div>
+                    <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span style="font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ m.fileName }}</span>
+                      <span style="font-size:12px;color:#6b7280">{{ m.docMeta }}</span>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.isLocation }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:280px;border-radius:8px;overflow:hidden;background:#fff;border:1px solid #e3e6ea">
+                    <div style="height:130px;background:#dde3da;display:flex;align-items:center;justify-content:center;color:#c2412d"><svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" stroke="#fff" stroke-width="1.2"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3" fill="#fff"></circle></svg></div>
+                    <div style="padding:8px 10px;display:flex;flex-direction:column;gap:2px">
+                      <span style="font-size:13.5px;font-weight:600">{{ m.locLabel }}</span>
+                      <span style="font-size:12px;color:#6b7280">{{ m.coords }}</span>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <div style="display:flex;align-items:flex-end;gap:10px">
+                  <span style="flex:1;font-size:14.5px;line-height:1.42;white-space:pre-wrap;word-break:break-word;text-wrap:pretty">{{ m.text }}</span>
+                  <span style="flex:none;display:flex;align-items:center;gap:3px;font-size:11px;color:#7b828d;font-variant-numeric:tabular-nums">{{ m.time }}
+                    <sc-if value="{{ m.isMe }}" hint-placeholder-val="{{ false }}">
+                      <svg width="17" height="11" viewBox="0 0 17 11" fill="none" stroke="{{ m.tickColor }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3.2 3.2L11 2"></path><sc-if value="{{ m.double }}" hint-placeholder-val="{{ false }}"><path d="M8.2 9.2L15 2"></path></sc-if></svg>
+                    </sc-if>
+                  </span>
+                </div>
+              </div>
+              <sc-if value="{{ m.showActions }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:2px;background:#fff;border-radius:16px;padding:2px;box-shadow:0 1px 3px rgba(0,0,0,.12);flex:none">
+                  <button onClick="{{ m.onReactOpen }}" title="Reagisci" style="width:28px;height:28px;border:0;border-radius:50%;background:transparent;cursor:pointer;color:#5b6270;display:flex;align-items:center;justify-content:center" style-hover="background:#f1f3f5"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"></path><path d="M9 9.5h.01M15 9.5h.01"></path></svg></button>
+                  <button onClick="{{ m.onReply }}" title="Rispondi" style="width:28px;height:28px;border:0;border-radius:50%;background:transparent;cursor:pointer;color:#5b6270;display:flex;align-items:center;justify-content:center" style-hover="background:#f1f3f5"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"></path></svg></button>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ m.pickerOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:2px;margin:4px 0;padding:4px 6px;background:#fff;border-radius:22px;box-shadow:0 4px 14px rgba(0,0,0,.14)">
+                <sc-for list="{{ m.choices }}" as="r" hint-placeholder-count="6">
+                  <button onClick="{{ r.onPick }}" style="width:36px;height:36px;border:0;border-radius:50%;background:{{ r.bg }};cursor:pointer;font-size:21px;line-height:1" style-hover="background:#f1f3f5">{{ r.e }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ m.hasReactions }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:-6px;display:flex;align-items:center;gap:3px;padding:2px 7px;background:#fff;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.12);font-size:14px;position:relative">{{ m.reactions }}<sc-if value="{{ m.reactCountShow }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;color:#5b6270">{{ m.reactCount }}</span></sc-if></div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}">
+          <div style="align-self:flex-start;margin-top:10px;display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:9px 14px;box-shadow:0 1px 1px rgba(0,0,0,.06);font-size:13px;color:#5b6270"><span style="letter-spacing:2px;font-weight:700;color:#1f8a5b;width:18px">{{ dots }}</span>{{ typingLabel }}</div>
+        </sc-if>
+      </div>
+
+      <sc-if value="{{ dragging }}" hint-placeholder-val="{{ false }}">
+        <div onDragLeave="{{ onDragLeave }}" style="position:absolute;inset:60px 0 0 0;background:rgba(239,236,228,.94);border:2px dashed #1f8a5b;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#1f8a5b;z-index:10">Rilascia qui per inviare</div>
+      </sc-if>
+
+      <sc-if value="{{ emojiOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:16px;bottom:74px;width:360px;height:320px;background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.16);display:flex;flex-direction:column;z-index:20;overflow:hidden">
+          <div style="display:flex;gap:2px;padding:6px 8px;border-bottom:1px solid #eceef1">
+            <sc-for list="{{ emojiTabs }}" as="t" hint-placeholder-count="6">
+              <button onClick="{{ t.onClick }}" title="{{ t.label }}" style="flex:1;height:34px;border:0;border-radius:8px;background:{{ t.bg }};cursor:pointer;font-size:18px">{{ t.icon }}</button>
+            </sc-for>
+          </div>
+          <span style="padding:8px 14px 4px;font-size:12px;font-weight:600;color:#6b7280">{{ emojiTabLabel }}</span>
+          <div style="flex:1;overflow-y:auto;padding:4px 8px 10px;display:grid;grid-template-columns:repeat(8,1fr);gap:2px;align-content:start">
+            <sc-for list="{{ emojis }}" as="e" hint-placeholder-count="32">
+              <button onClick="{{ e.onPick }}" style="height:38px;border:0;border-radius:8px;background:transparent;cursor:pointer;font-size:23px;line-height:1" style-hover="background:#f1f3f5">{{ e.e }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ attachOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:56px;bottom:74px;width:220px;background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.16);padding:6px;display:flex;flex-direction:column;z-index:20">
+          <sc-for list="{{ attachItems }}" as="a" hint-placeholder-count="3">
+            <button onClick="{{ a.onClick }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border:0;border-radius:10px;background:transparent;cursor:pointer;font:inherit;font-size:14px;color:#15181d;text-align:left" style-hover="background:#f3f4f6">
+              <span style="width:32px;height:32px;border-radius:50%;background:{{ a.color }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700">{{ a.short }}</span>{{ a.label }}
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <footer style="flex:none;background:#fff;border-top:1px solid #eceef1;display:flex;flex-direction:column">
+        <sc-if value="{{ hasReplyTo }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 16px 0 104px">
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding:6px 10px;border-radius:8px;background:#f1f3f5;border-left:3px solid #1f8a5b">
+              <span style="font-size:12px;font-weight:700;color:#1f8a5b">{{ replyToAuthor }}</span>
+              <span style="font-size:13px;color:#4b5260;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ replyToText }}</span>
+            </div>
+            <button onClick="{{ cancelReply }}" title="Annulla" style="width:30px;height:30px;border:0;border-radius:50%;background:transparent;cursor:pointer;color:#5b6270;font-size:18px" style-hover="background:#f1f3f5">×</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notRecording }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;align-items:flex-end;gap:6px;padding:10px 16px">
+            <button onClick="{{ toggleEmoji }}" title="Emoji" style="width:40px;height:40px;flex:none;border:0;border-radius:50%;background:{{ emojiBtnBg }};cursor:pointer;color:#5b6270;display:flex;align-items:center;justify-content:center" style-hover="background:#f1f3f5"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0"></path><path d="M9 9.5h.01M15 9.5h.01"></path></svg></button>
+            <button onClick="{{ toggleAttach }}" title="Allega" style="width:40px;height:40px;flex:none;border:0;border-radius:50%;background:{{ attachBtnBg }};cursor:pointer;color:#5b6270;display:flex;align-items:center;justify-content:center" style-hover="background:#f1f3f5"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="m21.4 11.1-9.2 9.2a6 6 0 0 1-8.5-8.5l8.6-8.6A4 4 0 1 1 18 8.8l-8.6 8.6a2 2 0 0 1-2.8-2.8l8.5-8.5"></path></svg></button>
+            <textarea data-chat-input="1" value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onKey }}" rows="1" placeholder="Scrivi un messaggio" style="flex:1;resize:none;border:0;outline:none;background:#f1f3f5;border-radius:20px;padding:10px 16px;font:inherit;font-size:14.5px;line-height:20px;max-height:120px;color:#15181d"></textarea>
+            <sc-if value="{{ hasDraft }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ send }}" title="Invia" style="width:40px;height:40px;flex:none;border:0;border-radius:50%;background:#1f8a5b;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center" style-hover="background:#176b46"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></button>
+            </sc-if>
+            <sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ startRec }}" title="Registra un vocale" style="width:40px;height:40px;flex:none;border:0;border-radius:50%;background:#1f8a5b;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center" style-hover="background:#176b46"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M19 10a7 7 0 0 1-14 0M12 17v5"></path></svg></button>
+            </sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;height:60px;box-sizing:border-box">
+            <button onClick="{{ cancelRec }}" title="Annulla" style="width:40px;height:40px;border:0;border-radius:50%;background:transparent;cursor:pointer;color:#c2412d;display:flex;align-items:center;justify-content:center" style-hover="background:#fbeceb"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"></path></svg></button>
+            <span style="width:10px;height:10px;border-radius:50%;background:#d93a2b"></span>
+            <span style="font-size:15px;font-variant-numeric:tabular-nums">{{ recTime }}</span>
+            <span style="flex:1;font-size:13px;color:#6b7280">{{ recNote }}</span>
+            <button onClick="{{ stopRec }}" title="Invia vocale" style="width:40px;height:40px;border:0;border-radius:50%;background:#1f8a5b;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg></button>
+          </div>
+        </sc-if>
+        <input data-chat-file="1" type="file" multiple="{{ true }}" onChange="{{ onFiles }}" style="display:none">
+      </footer>
+    </section>
+
+    <sc-if value="{{ infoOpen }}" hint-placeholder-val="{{ false }}">
+      <aside style="border-left:1px solid #e4e6ea;display:flex;flex-direction:column;min-height:0;background:#f7f8fa">
+        <div style="height:60px;flex:none;display:flex;align-items:center;gap:10px;padding:0 16px;background:#fff;border-bottom:1px solid #eceef1">
+          <button onClick="{{ toggleInfo }}" style="width:32px;height:32px;border:0;border-radius:50%;background:transparent;cursor:pointer;font-size:20px;color:#5b6270" style-hover="background:#f1f3f5">×</button>
+          <span style="font-weight:600;font-size:15px">{{ info.title }}</span>
+        </div>
+        <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
+          <div style="background:#fff;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+            <div style="position:relative;width:180px;height:180px;border-radius:50%;overflow:hidden;background:{{ chat.color }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:600;margin-bottom:10px">
+              {{ chat.initials }}
+              <sc-if value="{{ chat.hasAvatar }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0"><image-slot id="{{ chat.avatar }}" shape="circle" placeholder="Foto profilo" src="{{ chat.photo }}"></image-slot></div></sc-if>
+            </div>
+            <span style="font-size:20px;font-weight:600">{{ chat.name }}</span>
+            <span style="font-size:14px;color:#6b7280">{{ info.sub }}</span>
+          </div>
+          <sc-if value="{{ info.hasAbout }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#fff;padding:16px 20px;display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:12.5px;color:#6b7280">Info</span>
+              <span style="font-size:15px">{{ info.about }}</span>
+            </div>
+          </sc-if>
+          <div style="background:#fff;padding:16px 20px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:12.5px;color:#6b7280">{{ info.docsLabel }}</span>
+            <sc-for list="{{ info.docs }}" as="d" hint-placeholder-count="2">
+              <div onClick="{{ d.onOpen }}" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 0" style-hover="opacity:.75">
+                <span style="width:30px;height:36px;flex:none;border-radius:4px;background:{{ d.color }};color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ d.ext }}</span>
+                <span style="display:flex;flex-direction:column;gap:1px;min-width:0">
+                  <span style="font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ d.name }}</span>
+                  <span style="font-size:12px;color:#6b7280">{{ d.meta }}</span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </aside>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ lbOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(12,14,17,.96);z-index:100;display:flex;flex-direction:column;color:#fff">
+      <div style="height:60px;flex:none;display:flex;align-items:center;gap:14px;padding:0 20px">
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+          <span style="font-weight:600;font-size:15px">{{ lb.author }}</span>
+          <span style="font-size:12.5px;color:#a7adb7">{{ lb.when }}</span>
+        </div>
+        <sc-if value="{{ lb.isImage }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:4px">
+            <button onClick="{{ zoomOut }}" title="Riduci" style="width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:20px" style-hover="background:rgba(255,255,255,.16)">−</button>
+            <span style="width:52px;text-align:center;font-size:13px;color:#cfd3da;font-variant-numeric:tabular-nums">{{ lb.zoomLabel }}</span>
+            <button onClick="{{ zoomIn }}" title="Ingrandisci" style="width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:20px" style-hover="background:rgba(255,255,255,.16)">+</button>
+          </div>
+        </sc-if>
+        <button onClick="{{ closeLb }}" title="Chiudi" style="width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:22px" style-hover="background:rgba(255,255,255,.16)">×</button>
+      </div>
+      <div onWheel="{{ onWheel }}" onMouseDown="{{ panStart }}" onMouseMove="{{ panMove }}" onMouseUp="{{ panEnd }}" onMouseLeave="{{ panEnd }}" style="flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:{{ lb.cursor }}">
+        <sc-if value="{{ lb.isImage }}" hint-placeholder-val="{{ false }}">
+          <div style="width:min(86vw,1200px);height:calc(100vh - 140px);transform:{{ lb.transform }};transition:{{ lb.transition }}">
+            <sc-if value="{{ lb.hasSrc }}" hint-placeholder-val="{{ false }}"><div style="width:100%;height:100%;background-size:contain;background-repeat:no-repeat;background-position:center;background-image:{{ lb.srcBg }}"></div></sc-if>
+            <sc-if value="{{ lb.noSrc }}" hint-placeholder-val="{{ false }}"><image-slot id="{{ lb.slotId }}" shape="rect" fit="contain" placeholder="Trascina qui la foto"></image-slot></sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ lb.isVideo }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ lb.hasSrc }}" hint-placeholder-val="{{ false }}"><video ref="{{ lb.vRef }}" controls="{{ true }}" autoPlay="{{ true }}" style="max-width:86vw;max-height:calc(100vh - 140px);display:block;background:#000"></video></sc-if>
+          <sc-if value="{{ lb.noSrc }}" hint-placeholder-val="{{ false }}"><div style="width:min(80vw,960px);aspect-ratio:16/9;background:#1d2026;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#a7adb7;font-size:14px;text-align:center;padding:24px;box-sizing:border-box">Video di {{ lb.vdur }} — aggiungi l'URL del file nel copione (chat-script.js)</div></sc-if>
+        </sc-if>
+      </div>
+      <div style="height:56px;flex:none;display:flex;align-items:center;justify-content:center;padding:0 20px;font-size:14px;color:#dfe2e7;text-align:center">{{ lb.caption }}</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ docOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(12,14,17,.9);z-index:100;display:flex;flex-direction:column">
+      <div style="height:60px;flex:none;display:flex;align-items:center;gap:14px;padding:0 20px;color:#fff">
+        <span style="width:30px;height:36px;border-radius:4px;background:#c2412d;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center">PDF</span>
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0">
+          <span style="font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ doc.name }}</span>
+          <span style="font-size:12.5px;color:#a7adb7">{{ doc.meta }}</span>
+        </div>
+        <button onClick="{{ closeDoc }}" title="Chiudi" style="width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:22px" style-hover="background:rgba(255,255,255,.16)">×</button>
+      </div>
+      <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:20px;padding:20px 20px 48px">
+        <sc-if value="{{ doc.hasUrl }}" hint-placeholder-val="{{ false }}"><iframe src="{{ doc.url }}" title="Documento" style="width:min(90vw,900px);height:calc(100vh - 120px);border:0;background:#fff;border-radius:4px"></iframe></sc-if>
+        <sc-for list="{{ doc.pages }}" as="p" hint-placeholder-count="1">
+          <div style="width:min(90vw,680px);aspect-ratio:1/1.414;background:#fff;box-shadow:0 4px 24px rgba(0,0,0,.4);padding:64px 60px;box-sizing:border-box;display:flex;flex-direction:column;gap:24px">
+            <pre style="margin:0;flex:1;font-family:'Courier New',Courier,monospace;font-size:14px;line-height:1.7;color:#1d2026;white-space:pre-wrap">{{ p.text }}</pre>
+            <span style="align-self:center;font-family:'Courier New',monospace;font-size:12px;color:#8a9099">{{ p.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const EMOJI = [
+  ['😀', 'Faccine', '😀 😃 😄 😁 😆 😅 😂 🤣 😊 😇 🙂 🙃 😉 😌 😍 🥰 😘 😋 😛 😜 🤪 🤗 🤭 🤫 🤔 🤐 🤨 😐 😑 😶 😏 😒 🙄 😬 😮 😯 😲 😳 🥺 😦 😧 😨 😰 😥 😢 😭 😱 😖 😣 😞 😓 😩 😫 🥱 😤 😡 😠 😈 💀 👻 👽 🤖 😴 🤒 🤕 🤢 🥶 🥵'],
+  ['👍', 'Persone e gesti', '👍 👎 👌 ✌️ 🤞 🤟 🤘 🤙 👈 👉 👆 👇 ☝️ ✋ 🖐️ 👋 👏 🙌 🤲 🙏 ✍️ 💪 👀 👁️ 👂 🧠 🙋 🙅 🙆 🤷 🤦 🙇 🚶 🏃 🕵️ 🧙 🧛 🧟'],
+  ['🌙', 'Natura', '🌙 🌑 🌕 ⭐ ✨ ⚡ 🔥 🌧️ ⛈️ 🌫️ ❄️ 🌊 🌲 🌳 🍂 🍁 🌾 🌹 🥀 🌻 🦉 🦇 🐺 🐍 🕷️ 🕸️ 🐀 🦋 🐾'],
+  ['🍕', 'Cibo', '☕ 🍵 🍺 🍷 🥃 🍕 🍔 🍟 🥪 🍝 🍜 🥐 🍞 🧀 🍎 🍊 🍋 🍇 🍓 🍰 🎂 🍫 🍪'],
+  ['🔦', 'Oggetti', '🔦 🕯️ 💡 📷 📸 📹 🎥 🎙️ 🎧 📻 📱 💻 🔋 🗝️ 🔑 🚪 🪞 🧭 🗺️ 📍 📌 📎 📝 📖 📜 ✉️ 📦 ⏰ ⌛ 🔮 🪦 ⚰️ 🚗 🏚️ ⛪ 🏰'],
+  ['❤️', 'Simboli', '❤️ 🧡 💛 💚 💙 💜 🖤 🤍 🤎 💔 ❣️ 💕 💯 ✔️ ❌ ❓ ❗ ‼️ ⚠️ 🚫 ⛔ 🔴 🟢 ⚫ ⚪ ☠️ 🆘']
+].map(([icon, label, list]) => ({ icon, label, list: list.split(' ') }));
+const REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const GIORNI = ['domenica', 'lunedì', 'martedì', 'mercoledì', 'giovedì', 'venerdì', 'sabato'];
+const pad = n => String(n).padStart(2, '0');
+const hm = t => { const d = new Date(t); return d.getHours() + ':' + pad(d.getMinutes()); };
+const dayKey = t => { const d = new Date(t); return d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate(); };
+const dayLabel = t => { const d = new Date(t), g = GIORNI[d.getDay()]; return g[0].toUpperCase() + g.slice(1) + ' ' + d.getDate() + ' ' + MESI[d.getMonth()] + ' ' + d.getFullYear(); };
+const mmss = s => Math.floor(s / 60) + ':' + pad(Math.floor(s % 60));
+function parseAt(at, ref) {
+  let m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{1,2}):(\d{2})$/.exec(at);
+  if (m) return new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]).getTime();
+  m = /^(\d{1,2}):(\d{2})$/.exec(at);
+  if (m) { const d = new Date(ref); d.setHours(+m[1], +m[2], 0, 0); return d.getTime(); }
+  return ref;
+}
+function wave(seed, n) { let s = seed * 9301 + 49297, a = []; for (let i = 0; i < n; i++) { s = (s * 9301 + 49297) % 233280; a.push(Math.round(18 + (s / 233280) * 70 * (0.45 + 0.55 * Math.abs(Math.sin(i / 4 + seed))))); } return a; }
+
+class Component extends DCLogic {
+  state = { ready: false, active: null, chats: {}, clock: 0, draft: '', replyTo: null, emojiOpen: false, emojiTab: 0, attachOpen: false, picker: null, hover: null, search: '', dragging: false, dots: 1, info: false, lb: null, zoom: 1, pan: [0, 0], panning: null, doc: null, voice: null, vpos: {}, rec: null, recNow: 0 };
+  scrollRef = { get current() { return document.querySelector('[data-chat-scroll]'); } }; inputRef = { get current() { return document.querySelector('[data-chat-input]'); } }; fileRef = { get current() { return document.querySelector('[data-chat-file]'); } };
+  timers = []; seq = 0; busy = {};
+
+  componentDidMount() {
+    const boot = () => { if (window.ChatScript) { clearInterval(this._poll); this.init(); return true; } };
+    if (!boot()) this._poll = setInterval(boot, 50);
+    this._dotT = setInterval(() => { if (Object.values(this.state.chats).some(c => c.typing) || this.state.rec) this.setState(s => ({ dots: s.dots % 3 + 1, recNow: Date.now() })); }, 400);
+    this._key = e => { if (e.key === 'Escape') this.setState({ lb: null, doc: null, emojiOpen: false, attachOpen: false, picker: null }); };
+    window.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() { clearInterval(this._dotT); clearInterval(this._poll); this.timers.forEach(clearTimeout); window.removeEventListener('keydown', this._key); this.stopVoice(); }
+  componentDidUpdate(pp, ps) {
+    const a = this.activeId(), cur = this.cs(a), prev = ps.chats[a] || {};
+    if (ps.active !== this.state.active || ps.ready !== this.state.ready || (cur.msgs || []).length !== (prev.msgs || []).length || cur.typing !== prev.typing) {
+      const go = () => { const el = this.scrollRef.current; if (el) el.scrollTop = el.scrollHeight; }; requestAnimationFrame(go); setTimeout(go, 80); setTimeout(go, 300);
+    }
+  }
+
+  init() {
+    const S = window.ChatScript; let clock = parseAt(S.start || '2026-12-01 21:00', Date.now()); const chats = {}; let maxT = clock;
+    S.chats.forEach(def => {
+      let t = clock; const msgs = [];
+      (def.history || []).forEach(h => { if (h.at) t = parseAt(h.at, t); msgs.push(this.build(def, h, t, h.from || def.with)); if (t > maxT) maxT = t; });
+      const p = def.presence || {};
+      chats[def.id] = { msgs, step: 0, typing: null, unread: 0, online: !!p.online, lastSeen: p.lastSeen ? parseAt(p.lastSeen, clock) : (msgs.length ? msgs[msgs.length - 1].ts : null) };
+    });
+    this.setState({ ready: true, chats, clock: maxT });
+  }
+  build(def, e, ts, from) {
+    const m = { id: 'm' + (++this.seq), ts, from, text: e.text || '', fwd: !!e.forwarded, reactions: {}, status: e.status || 'sent' };
+    if (e.photo !== undefined) Object.assign(m, { kind: 'image', src: e.photo || '' });
+    else if (e.video !== undefined) Object.assign(m, { kind: 'video', src: e.video || '', dur: e.dur || 0 });
+    else if (e.voice) Object.assign(m, { kind: 'voice', src: e.url || '', dur: e.dur || 10, eventAt: e.eventAt, wave: wave(this.seq, 36) });
+    else if (e.doc) Object.assign(m, { kind: 'doc', fileName: e.doc, pages: e.pages, size: e.size || '', url: e.url || '', content: e.content || [] });
+    else if (e.location) Object.assign(m, { kind: 'location', locLabel: e.location, coords: e.coords || '' });
+    m.slotId = 'chat-' + def.id + '-' + this.seq;
+    return m;
+  }
+
+  script() { const S = window.ChatScript || { me: { initials: 'TU' }, people: {}, chats: [] }; S.chats.forEach(c => { if (c.members) c.group = true; }); return S; }
+  chatDef(id) { return this.script().chats.find(c => c.id === id); }
+  activeId() { return this.state.active || (this.script().chats[0] || {}).id; }
+  cs(id) { return this.state.chats[id] || { msgs: [], step: 0, typing: null, unread: 0 }; }
+  person(id) { return (this.script().people || {})[id] || { name: id, short: id, color: '#6b7280', initials: '?' }; }
+  patch(id, fn) { this.setState(s => { const c = s.chats[id] || { msgs: [], step: 0, unread: 0 }; return { chats: Object.assign({}, s.chats, { [id]: Object.assign({}, c, fn(c, s)) }) }; }); }
+  later(ms, f) { const t = setTimeout(f, ms); this.timers.push(t); }
+  tick(min) { this.setState(s => ({ clock: s.clock + min * 60000 })); }
+
+  push(id, m) { this.patch(id, c => ({ msgs: c.msgs.concat([m]), unread: (m.from !== 'me' && this.activeId() !== id) ? c.unread + 1 : c.unread })); }
+  setRead(id, status) { this.patch(id, c => ({ msgs: c.msgs.map(m => m.from !== 'me' || m.status === 'read' || (status === 'delivered' && m.status !== 'sent') ? m : Object.assign({}, m, { status })) })); }
+
+  userSent(id, text) {
+    const def = this.chatDef(id); if (!def) return;
+    this.later(600, () => this.setRead(id, 'delivered'));
+    if (this.busy[id]) return;
+    clearTimeout(this._deb); this._deb = setTimeout(() => {
+      const c = this.cs(id), low = (text || '').toLowerCase();
+      const trig = (def.triggers || []).find(t => t.words.some(w => low.includes(w)));
+      let entries;
+      if (trig) entries = trig.reply;
+      else if (c.step < (def.steps || []).length) { entries = def.steps[c.step]; this.patch(id, cc => ({ step: cc.step + 1 })); }
+      else entries = def.fallback || [];
+      this.runStep(id, def, entries);
+    }, 1500);
+    this.timers.push(this._deb);
+  }
+  runStep(id, def, entries) {
+    if (!entries.length) return;
+    const q = entries.slice();
+    if (!q.some(e => 'read' in e)) q.unshift({ read: true });
+    if (!def.group && !q.some(e => e.presence)) { q.unshift({ presence: 'online' }); q.push({ wait: 2500 }, { presence: 'offline' }); }
+    this.busy[id] = true; this.play(id, def, q, true);
+  }
+  play(id, def, q, first) {
+    if (!q.length) { this.busy[id] = false; return; }
+    const e = q.shift(), next = (ms, f) => this.later(ms, () => this.play(id, def, q, f));
+    if (e.at) this.setState(s => ({ clock: Math.max(s.clock, parseAt(e.at, s.clock)) }));
+    if (e.presence) { this.patch(id, (c, s) => e.presence === 'online' ? { online: true } : { online: false, lastSeen: s.clock }); return next(500, first); }
+    if ('read' in e) { if (e.read) this.setRead(id, 'read'); return next(800, first); }
+    if (e.wait !== undefined) { if (e.minutes) this.tick(e.minutes); return next(e.wait, first); }
+    if (e.react) {
+      this.patch(id, c => { const ms = c.msgs.slice(); for (let i = ms.length - 1; i >= 0; i--) if (ms[i].from === 'me') { ms[i] = Object.assign({}, ms[i], { reactions: Object.assign({}, ms[i].reactions, { [e.from || def.with]: e.react }) }); break; } return { msgs: ms }; });
+      return next(700, first);
+    }
+    const who = e.from || def.with, kind = e.voice ? 'rec' : 'type';
+    const dur = e.delay || (e.voice ? Math.min(5000, 1500 + e.dur * 60) : Math.min(4200, 900 + (e.text || '').length * 40));
+    this.patch(id, () => ({ typing: who, typingKind: kind }));
+    this.later(dur, () => {
+      if (first && !e.at) this.tick(1);
+      this.setState(s => { const c = s.chats[id]; const m = this.build(def, e, s.clock, who); return { chats: Object.assign({}, s.chats, { [id]: Object.assign({}, c, { typing: null, msgs: c.msgs.concat([m]), unread: this.activeId() !== id ? c.unread + 1 : c.unread }) }) }; });
+      next(600, false);
+    });
+  }
+
+  sendMsg(extra) {
+    const id = this.activeId(), def = this.chatDef(id), s = this.state;
+    this.setState(st => ({ clock: st.clock + 60000 }));
+    const m = this.build(def, extra, s.clock + 60000, 'me');
+    if (extra.src && extra.kind) Object.assign(m, extra);
+    if (s.replyTo) m.replyTo = s.replyTo;
+    this.push(id, m);
+    this.setState({ replyTo: null, emojiOpen: false, attachOpen: false });
+    this.userSent(id, m.text);
+  }
+  send = () => { const t = this.state.draft.trim(); if (!t) return; this.setState({ draft: '' }); this.sendMsg({ text: t }); };
+  sendFiles(files) {
+    Array.from(files || []).forEach(f => {
+      const size = f.size > 1048576 ? (f.size / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(f.size / 1024)) + ' KB';
+      const url = URL.createObjectURL(f);
+      if (f.type.startsWith('image/')) this.sendMsg({ photo: url });
+      else if (f.type.startsWith('video/')) { const v = document.createElement('video'); v.preload = 'metadata'; v.onloadedmetadata = () => this.sendMsg({ video: url, dur: Math.round(v.duration) || 0 }); v.onerror = () => this.sendMsg({ video: url, dur: 0 }); v.src = url; }
+      else if (f.type.startsWith('audio/')) this.sendMsg({ voice: true, url, dur: 10 });
+      else this.sendMsg({ doc: f.name, size, url: f.type === 'application/pdf' ? url : '' });
+    });
+  }
+  insertEmoji(e) {
+    const el = this.inputRef.current, d = this.state.draft;
+    const a = el ? el.selectionStart : d.length, b = el ? el.selectionEnd : d.length;
+    this.setState({ draft: d.slice(0, a) + e + d.slice(b) }, () => { if (el) { el.focus(); el.selectionStart = el.selectionEnd = a + e.length; } });
+  }
+
+  playVoice(m, from) {
+    this.stopVoice();
+    const pos = from != null ? from : (this.state.vpos[m.id] || 0) >= m.dur ? 0 : (this.state.vpos[m.id] || 0);
+    if (m.src) {
+      const a = new Audio(m.src); this._audio = a; a.currentTime = pos;
+      a.ontimeupdate = () => this.setState(s => ({ vpos: Object.assign({}, s.vpos, { [m.id]: a.currentTime }) }));
+      a.onended = () => { this.setState(s => ({ voice: null, vpos: Object.assign({}, s.vpos, { [m.id]: 0 }) })); };
+      a.onloadedmetadata = () => { if (isFinite(a.duration)) m.dur = a.duration; };
+      a.play().catch(() => {});
+    } else {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) try {
+        const ctx = this._ctx || (this._ctx = new AC()); ctx.resume && ctx.resume();
+        const len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0); let l = 0;
+        for (let i = 0; i < len; i++) { l = (l + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = l * 3.2; }
+        const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+        const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 380; f.Q.value = 0.6;
+        const g = ctx.createGain(); g.gain.value = 0.2; src.connect(f); f.connect(g); g.connect(ctx.destination); src.start();
+        const nodes = [src];
+        if (m.eventAt != null && m.eventAt > pos) {
+          const t0 = ctx.currentTime + (m.eventAt - pos), o = ctx.createOscillator(), og = ctx.createGain(), of = ctx.createBiquadFilter();
+          o.type = 'sawtooth'; o.frequency.setValueAtTime(140, t0); o.frequency.linearRampToValueAtTime(118, t0 + 0.6); o.frequency.linearRampToValueAtTime(150, t0 + 1.3);
+          of.type = 'lowpass'; of.frequency.value = 700; og.gain.setValueAtTime(0, t0); og.gain.linearRampToValueAtTime(0.05, t0 + 0.25); og.gain.linearRampToValueAtTime(0.03, t0 + 0.9); og.gain.linearRampToValueAtTime(0, t0 + 1.5);
+          o.connect(of); of.connect(og); og.connect(ctx.destination); o.start(t0); o.stop(t0 + 1.6); nodes.push(o);
+        }
+        this._nodes = nodes;
+      } catch (e) {}
+      this._t0 = Date.now() - pos * 1000;
+      this._vt = setInterval(() => {
+        const p = (Date.now() - this._t0) / 1000;
+        if (p >= m.dur) { this.stopVoice(); this.setState(s => ({ vpos: Object.assign({}, s.vpos, { [m.id]: 0 }) })); }
+        else this.setState(s => ({ vpos: Object.assign({}, s.vpos, { [m.id]: p }) }));
+      }, 100);
+    }
+    this.setState(s => ({ voice: m.id, vpos: Object.assign({}, s.vpos, { [m.id]: pos }) }));
+  }
+  stopVoice() {
+    clearInterval(this._vt);
+    if (this._audio) { this._audio.pause(); this._audio = null; }
+    (this._nodes || []).forEach(n => { try { n.stop(); } catch (e) {} }); this._nodes = null;
+    if (this.state.voice) this.setState({ voice: null });
+  }
+
+  async startRec() {
+    this.setState({ rec: { start: Date.now(), real: false }, recNow: Date.now(), emojiOpen: false, attachOpen: false });
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mr = new MediaRecorder(stream), chunks = [];
+      mr.ondataavailable = e => chunks.push(e.data);
+      mr.onstop = () => { stream.getTracks().forEach(t => t.stop()); if (this._recSend) { const url = URL.createObjectURL(new Blob(chunks, { type: mr.mimeType })); this.sendMsg({ voice: true, url, dur: this._recDur }); } };
+      mr.start(); this._mr = mr; this.setState(s => ({ rec: s.rec ? Object.assign({}, s.rec, { real: true }) : null }));
+    } catch (e) { this._mr = null; }
+  }
+  finishRec(sendIt) {
+    const r = this.state.rec; if (!r) return;
+    this._recDur = Math.max(1, Math.round((Date.now() - r.start) / 1000)); this._recSend = sendIt;
+    if (this._mr && this._mr.state !== 'inactive') this._mr.stop();
+    else if (sendIt) this.sendMsg({ voice: true, dur: this._recDur });
+    this._mr = null; this.setState({ rec: null });
+  }
+
+  renderVals() {
+    const S = this.script(), s = this.state, id = this.activeId(), def = this.chatDef(id) || { name: '', color: '#999' }, c = this.cs(id);
+    const nameOf = (d, from) => from === 'me' ? 'Tu' : this.person(from)[d.group ? 'short' : 'name'];
+    const head = d => { const o = d.group ? { name: d.name, initials: d.initials, color: d.color, avatar: '', photo: d.photo || '' } : (p => ({ name: p.name, initials: p.initials, color: p.color, avatar: p.avatar || '', photo: p.photo || '' }))(this.person(d.with)); o.hasPhoto = !!o.photo; o.photoBg = o.photo ? 'url("' + o.photo + '")' : 'none'; return o; };
+    const prevOf = m => (m.fwd ? '↪ ' : '') + (m.kind === 'image' ? '📷 Foto' : m.kind === 'video' ? '🎥 Video' : m.kind === 'voice' ? '🎙️ Messaggio vocale (' + mmss(m.dur) + ')' : m.kind === 'doc' ? '📄 ' + m.fileName : m.kind === 'location' ? '📍 Posizione' : m.text);
+    const fmtSeen = t => { if (!t) return ''; const dk = (k => { const [y, mo, d] = k.split('-'); return new Date(+y, +mo, +d); }); const diff = Math.round((dk(dayKey(s.clock)) - dk(dayKey(t))) / 864e5); const day = diff === 0 ? 'oggi' : diff === 1 ? 'ieri' : 'il ' + new Date(t).getDate() + ' ' + MESI[new Date(t).getMonth()].slice(0, 3); return 'ultimo accesso ' + day + ' alle ' + hm(t); };
+
+    const q = s.search.trim().toLowerCase();
+    const list = S.chats.map(d => ({ d, h: head(d) })).filter(x => !q || x.h.name.toLowerCase().includes(q)).map(({ d, h }) => {
+      const st = this.cs(d.id), last = st.msgs[st.msgs.length - 1];
+      const typ = st.typing ? (d.group ? this.person(st.typing).short + ' ' : '') + (st.typingKind === 'rec' ? 'sta registrando…' : 'sta scrivendo…') : null;
+      const lastDay = last && dayKey(last.ts) !== dayKey(s.clock);
+      return Object.assign({}, h, { hasAvatar: !!h.avatar, bg: d.id === id ? '#ebf4ee' : '#fff', time: last ? (lastDay ? new Date(last.ts).getDate() + '/' + (new Date(last.ts).getMonth() + 1) : hm(last.ts)) : '', hasUnread: st.unread > 0, unread: st.unread,
+        timeColor: st.unread ? '#1f8a5b' : '#8a9099', previewColor: typ ? '#1f8a5b' : '#6b7280',
+        preview: typ || (last ? (last.from === 'me' ? 'Tu: ' : d.group ? nameOf(d, last.from) + ': ' : '') + prevOf(last) : (d.group ? (d.members || []).length + 1 + ' partecipanti' : '')),
+        onOpen: () => { this.stopVoice(); this.setState({ active: d.id, replyTo: null, picker: null, emojiOpen: false, attachOpen: false }); this.patch(d.id, () => ({ unread: 0 })); } });
+    });
+
+    const colorOf = from => from === 'me' ? '#1f8a5b' : this.person(from).color;
+    const msgs = (c.msgs || []).map((m, i) => {
+      const me = m.from === 'me', prev = c.msgs[i - 1], newDay = !prev || dayKey(prev.ts) !== dayKey(m.ts), cont = prev && !newDay && prev.from === m.from;
+      const rx = Object.values(m.reactions || {}), rp = m.replyTo, vp = s.vpos[m.id] || 0, playing = s.voice === m.id;
+      return {
+        showDay: newDay, dayLabel: dayLabel(m.ts), align: me ? 'flex-end' : 'flex-start', rowDir: me ? 'row-reverse' : 'row', gapTop: cont ? '2px' : '8px', bg: me ? '#e2f3e8' : '#ffffff',
+        fwd: m.fwd, showName: !me && def.group && !cont, name: nameOf(def, m.from), nameColor: colorOf(m.from),
+        text: m.text, time: hm(m.ts), isMe: me, double: m.status !== 'sent', tickColor: m.status === 'read' ? '#1f8a5b' : '#8a9099',
+        hasReply: !!rp, replyAuthor: rp ? rp.author : '', replyText: rp ? rp.text : '', quoteBg: me ? 'rgba(31,138,91,.10)' : '#f3f4f6', quoteColor: rp ? colorOf(rp.from) : '#1f8a5b',
+        isImage: m.kind === 'image', isVideo: m.kind === 'video', hasSrc: !!m.src, noSrc: !m.src, srcBg: m.src ? 'url("' + m.src + '")' : 'none', vRef: el => { if (el && m.src && el.getAttribute('src') !== m.src) el.src = m.src; }, slotId: m.slotId, vdur: mmss(m.dur || 0),
+        onExpand: () => this.setState({ lb: m.id, zoom: 1, pan: [0, 0] }),
+        isVoice: m.kind === 'voice', vPlaying: playing, vPaused: !playing, vTime: (playing || vp > 0) ? mmss(vp) + ' / ' + mmss(m.dur) : mmss(m.dur),
+        bars: (m.wave || []).map((h, k) => ({ h: h + '%', bg: k / 36 < vp / m.dur ? '#1f8a5b' : (me ? '#9cc9ad' : '#c3c8d0') })),
+        onVToggle: () => playing ? this.stopVoice() : this.playVoice(m),
+        onVSeek: ev => { const r = ev.currentTarget.getBoundingClientRect(); const p = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width)) * m.dur; this.playVoice(m, p); },
+        isDoc: m.kind === 'doc', fileName: m.fileName, ext: (m.fileName || '').split('.').pop().toUpperCase().slice(0, 4), docMeta: [m.pages ? m.pages + (m.pages === 1 ? ' pagina' : ' pagine') : '', m.size].filter(Boolean).join(' · '),
+        onDoc: () => this.setState({ doc: m.id }),
+        isLocation: m.kind === 'location', locLabel: m.locLabel, coords: m.coords,
+        hasReactions: rx.length > 0, reactions: [...new Set(rx)].join(''), reactCount: rx.length, reactCountShow: rx.length > 1,
+        showActions: s.hover === m.id, pickerOpen: s.picker === m.id,
+        onEnter: () => this.setState({ hover: m.id }), onLeave: () => this.setState(st => ({ hover: null, picker: st.picker === m.id ? null : st.picker })),
+        onReactOpen: () => this.setState(st => ({ picker: st.picker === m.id ? null : m.id })),
+        onReply: () => { this.setState({ replyTo: { from: m.from, author: m.from === 'me' ? 'Tu' : nameOf(def, m.from), text: prevOf(m) } }); this.inputRef.current && this.inputRef.current.focus(); },
+        choices: REACTIONS.map(e => ({ e, bg: (m.reactions || {}).me === e ? '#dcefe3' : 'transparent', onPick: () => { this.patch(id, cc => ({ msgs: cc.msgs.map(x => { if (x.id !== m.id) return x; const r = Object.assign({}, x.reactions); if (r.me === e) delete r.me; else r.me = e; return Object.assign({}, x, { reactions: r }); }) })); this.setState({ picker: null }); } })),
+      };
+    });
+
+    const sk = id + '|' + msgs.length + '|' + (c.typing || '') + '|' + s.ready;
+    if (sk !== this._sk) { this._sk = sk; const go = () => { const el = this.scrollRef.current; if (el) el.scrollTop = el.scrollHeight; }; setTimeout(go, 0); setTimeout(go, 120); setTimeout(go, 400); }
+    const h = head(def);
+    const typingLabel = c.typing ? (def.group ? this.person(c.typing).short + ' ' : '') + (c.typingKind === 'rec' ? 'sta registrando un audio' : 'sta scrivendo') : '';
+    const status = c.typing ? typingLabel + '…' : def.group ? [...(def.members || []).map(x => this.person(x).short), 'Tu'].join(', ') : c.online ? 'online' : fmtSeen(c.lastSeen);
+    const lbm = s.lb ? c.msgs.find(x => x.id === s.lb) : null;
+    const dm = s.doc ? c.msgs.find(x => x.id === s.doc) : null;
+    const docs = c.msgs.filter(x => x.kind === 'doc' || x.kind === 'image' || x.kind === 'video' || x.kind === 'voice');
+    const pick = accept => () => { const el = this.fileRef.current; if (el) { el.accept = accept; el.click(); } this.setState({ attachOpen: false }); };
+    const tab = EMOJI[s.emojiTab];
+    const seen = !def.group && this.person(def.with);
+
+    return {
+      cols: window.innerWidth < 760 ? (s.info ? '0px 0px minmax(0,1fr)' : '0px minmax(0,1fr)') : (s.info ? '340px minmax(0,1fr) 340px' : '340px minmax(0,1fr)'),
+      meInitials: S.me.initials, list, search: s.search, onSearch: e => this.setState({ search: e.target.value }),
+      chat: Object.assign({}, h, { hasAvatar: !!h.avatar, status, statusColor: c.typing || c.online ? '#1f8a5b' : '#6b7280' }),
+      clockLabel: s.ready ? new Date(s.clock).getDate() + ' ' + MESI[new Date(s.clock).getMonth()].slice(0, 3) + ' ' + new Date(s.clock).getFullYear() + ' · ' + hm(s.clock) : '',
+      msgs, isEmpty: s.ready && msgs.length === 0, typing: !!c.typing, typingLabel, dots: '•'.repeat(s.dots),
+      resetChat: () => { this.timers.forEach(clearTimeout); this.timers = []; this.busy = {}; this.stopVoice(); this.init(); this.setState({ replyTo: null, lb: null, doc: null }); },
+      toggleInfo: () => this.setState(st => ({ info: !st.info })),
+      infoOpen: s.info,
+      info: { title: def.group ? 'Info gruppo' : 'Info contatto', sub: def.group ? (def.members || []).length + 1 + ' partecipanti' : seen.phone || '', hasAbout: !!(seen && seen.about), about: seen ? seen.about : '',
+        docsLabel: 'Media e documenti · ' + docs.length,
+        docs: docs.map(x => ({ name: x.kind === 'doc' ? x.fileName : prevOf(x).replace(/^\S+ /, ''), meta: dayLabel(x.ts).split(' ').slice(1).join(' ') + ', ' + hm(x.ts), ext: x.kind === 'doc' ? 'PDF' : x.kind === 'voice' ? 'AUD' : x.kind === 'video' ? 'VID' : 'IMG', color: x.kind === 'doc' ? '#c2412d' : x.kind === 'voice' ? '#1f8a5b' : '#3b414b',
+          onOpen: () => x.kind === 'doc' ? this.setState({ doc: x.id }) : x.kind === 'voice' ? this.playVoice(x) : this.setState({ lb: x.id, zoom: 1, pan: [0, 0] }) })) },
+      dragging: s.dragging,
+      onDragOver: e => { if (e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files') && !e.target.closest('image-slot')) { e.preventDefault(); if (!s.dragging) this.setState({ dragging: true }); } },
+      onDragLeave: () => this.setState({ dragging: false }),
+      onDrop: e => { if (!s.dragging) return; e.preventDefault(); this.setState({ dragging: false }); this.sendFiles(e.dataTransfer.files); },
+      emojiOpen: s.emojiOpen, emojiTabLabel: tab.label,
+      emojiTabs: EMOJI.map((t, i) => ({ icon: t.icon, label: t.label, bg: i === s.emojiTab ? '#ebf4ee' : 'transparent', onClick: () => this.setState({ emojiTab: i }) })),
+      emojis: tab.list.map(e => ({ e, onPick: () => this.insertEmoji(e) })),
+      toggleEmoji: () => this.setState(st => ({ emojiOpen: !st.emojiOpen, attachOpen: false })),
+      emojiBtnBg: s.emojiOpen ? '#ebf4ee' : 'transparent', attachBtnBg: s.attachOpen ? '#ebf4ee' : 'transparent',
+      attachOpen: s.attachOpen, toggleAttach: () => this.setState(st => ({ attachOpen: !st.attachOpen, emojiOpen: false })),
+      attachItems: [
+        { label: 'Foto e video', short: 'IMG', color: '#3b82c4', onClick: pick('image/*,video/*') },
+        { label: 'Documento', short: 'PDF', color: '#c2412d', onClick: pick('.pdf,.doc,.docx,.txt,application/pdf') },
+        { label: 'Audio', short: 'AUD', color: '#7a5a3a', onClick: pick('audio/*') },
+        { label: 'Posizione', short: 'GPS', color: '#2f7d5b', onClick: () => this.sendMsg({ location: 'Posizione attuale', coords: '44.8015° N, 10.3279° E' }) },
+      ],
+      onFiles: e => { this.sendFiles(e.target.files); e.target.value = ''; },
+      hasReplyTo: !!s.replyTo, replyToAuthor: s.replyTo ? s.replyTo.author : '', replyToText: s.replyTo ? s.replyTo.text : '', cancelReply: () => this.setState({ replyTo: null }),
+      draft: s.draft, hasDraft: !!s.draft.trim(), noDraft: !s.draft.trim(), onDraft: e => this.setState({ draft: e.target.value }),
+      onKey: e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); } },
+      send: this.send,
+      recording: !!s.rec, notRecording: !s.rec, recTime: s.rec ? mmss(Math.max(0, (s.recNow - s.rec.start) / 1000)) : '0:00',
+      recNote: s.rec && s.rec.real ? 'Registrazione in corso' : 'Registrazione simulata (microfono non disponibile)',
+      startRec: () => this.startRec(), stopRec: () => this.finishRec(true), cancelRec: () => this.finishRec(false),
+      lbOpen: !!lbm,
+      lb: lbm ? { author: nameOf(def, lbm.from), when: dayLabel(lbm.ts) + ' alle ' + hm(lbm.ts), caption: lbm.text, isImage: lbm.kind === 'image', isVideo: lbm.kind === 'video', hasSrc: !!lbm.src, noSrc: !lbm.src, srcBg: lbm.src ? 'url("' + lbm.src + '")' : 'none', vRef: el => { if (el && lbm.src && el.getAttribute('src') !== lbm.src) el.src = lbm.src; }, slotId: lbm.slotId, vdur: mmss(lbm.dur || 0),
+        zoomLabel: Math.round(s.zoom * 100) + '%', transform: `translate(${s.pan[0]}px, ${s.pan[1]}px) scale(${s.zoom})`, transition: s.panning ? 'none' : 'transform 180ms ease-out', cursor: lbm.kind === 'image' ? (s.zoom > 1 ? (s.panning ? 'grabbing' : 'grab') : 'zoom-in') : 'default' } : {},
+      closeLb: () => this.setState({ lb: null }),
+      zoomIn: () => this.setState(st => ({ zoom: Math.min(5, st.zoom + 0.5) })),
+      zoomOut: () => this.setState(st => ({ zoom: Math.max(1, st.zoom - 0.5), pan: st.zoom - 0.5 <= 1 ? [0, 0] : st.pan })),
+      onWheel: e => { if (!lbm || lbm.kind !== 'image') return; const z = Math.max(1, Math.min(5, s.zoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15))); this.setState({ zoom: z, pan: z === 1 ? [0, 0] : s.pan }); },
+      panStart: e => { if (!lbm || lbm.kind !== 'image' || e.target.closest('image-slot')) return; if (s.zoom === 1) { this.setState({ zoom: 2.5 }); return; } this.setState({ panning: [e.clientX - s.pan[0], e.clientY - s.pan[1]], _moved: false }); },
+      panMove: e => { if (s.panning) this.setState({ pan: [e.clientX - s.panning[0], e.clientY - s.panning[1]] }); },
+      panEnd: () => { if (s.panning) this.setState({ panning: null }); },
+      docOpen: !!dm,
+      doc: dm ? { name: dm.fileName, meta: [nameOf(def, dm.from), dayLabel(dm.ts) + ' alle ' + hm(dm.ts), dm.size].filter(Boolean).join(' · '), hasUrl: !!dm.url, url: dm.url,
+        pages: dm.url ? [] : (dm.content.length ? dm.content : ['Anteprima non disponibile.\n\nAggiungi "content" o "url" a questo documento nel copione (chat-script.js).']).map((t, i, a) => ({ text: t, label: (i + 1) + ' / ' + a.length })) } : {},
+      closeDoc: () => this.setState({ doc: null }),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+:root {
+  /* Base — stone & earth */
+  --stone-950: #262019;
+  --stone-900: #35302b;   /* wordmark brown */
+  --stone-700: #5c5148;
+  --stone-500: #8a7d70;
+  --stone-300: #c4b9ac;
+  --stone-150: #e6dfd3;
+  --stone-100: #efe9de;
+  --stone-050: #f7f3ea;   /* warm parchment */
+  --white: #fffdf9;
+
+  /* Sage / olive (logo greens) */
+  --sage-700: #6f7040;
+  --sage-600: #8a8a52;
+  --sage-500: #a3a366;    /* primary brand green */
+  --sage-300: #c5c399;
+  --sage-150: #e2dfc6;
+  --olive-500: #b4b25a;   /* chartreuse pebble */
+
+  /* Terracotta (logo ambers) */
+  --terra-700: #9c5e2f;
+  --terra-600: #bf7a44;
+  --terra-500: #d0894f;   /* accent */
+  --terra-300: #e3b183;
+  --terra-150: #f2ddc4;
+
+  /* Plum taupe (dark pebble) */
+  --plum-700: #4a3c3a;
+  --plum-500: #63514f;
+  --plum-300: #a08d8a;
+
+  /* Semantic states */
+  --ok-600: #6f7040;      /* success = deep sage */
+  --warn-600: #bf7a44;    /* warning = terracotta */
+  --danger-600: #a14636;  /* clay red */
+  --info-600: #63514f;    /* neutral plum */
+
+  /* Semantic aliases */
+  --bg-page: var(--stone-050);
+  --bg-sunken: var(--stone-100);
+  --surface-card: var(--white);
+  --surface-raised: var(--white);
+  --surface-inverse: var(--stone-900);
+
+  --text-heading: var(--stone-900);
+  --text-body: var(--stone-700);
+  --text-muted: var(--stone-500);
+  --text-inverse: var(--stone-050);
+  --text-on-accent: #fffdf9;
+
+  --accent: var(--terra-600);
+  --accent-hover: var(--terra-700);
+  --accent-soft: var(--terra-150);
+  --brand: var(--sage-600);
+  --brand-hover: var(--sage-700);
+  --brand-soft: var(--sage-150);
+
+  --border-subtle: #e3dccd;
+  --border-strong: #c9bfad;
+  --focus-ring: rgba(191, 122, 68, 0.45);
+}
